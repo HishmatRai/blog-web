@@ -7,11 +7,22 @@ import {
     where,
     onSnapshot,
     doc,
+    updateDoc
 } from "firebase/firestore";
 import firebase from "../../config/firebase";
 import { Card } from "./../../component";
+import moment from "moment";
+import { Divider, Avatar, Grid, Paper } from "@material-ui/core";
+import {
+    FacebookShareButton,
+    FacebookIcon,
+    EmailShareButton,
+    EmailIcon
+
+} from "react-share";
 const BlogView = () => {
     const location = useLocation();
+    console.log("location.pathname",location.pathname)
     const path = location.pathname.slice(11)
     const db = getFirestore(firebase);
     const [loading, setLoding] = useState(true);
@@ -47,9 +58,37 @@ const BlogView = () => {
 
     }, []);
 
-const PostHandler =()=>{
-    console.log("comment",name , email ,message)
-}
+    const PostHandler = async () => {
+        if (name === "") {
+            alert("Name required")
+        } else if (email === "") {
+            alert("email required")
+        } else if (message === "") {
+            alert("message required")
+        } else {
+            let commentValue = {
+                name: name,
+                email: email,
+                message: message,
+                date: moment().format()
+            }
+            let newComment = [];
+            comments.push(commentValue);
+            console.log("newComment", newComment)
+            // setComments([...newComment]);
+            console.log("comments", comments)
+            const washingtonRef = doc(db, "blogs", path);
+            await updateDoc(washingtonRef, {
+                comment: comments
+            });
+            alert("comment added");
+            setName("");
+            setEmail("");
+            setMessage("")
+
+        }
+    }
+    console.log("comments", comments)
     return (
         <div style={{ padding: "20px" }}>
             {loading ?
@@ -65,9 +104,40 @@ const PostHandler =()=>{
                         profileURL={profiePath}
                         disable={true}
                     />
+                    <hr />
+                    <h1>Share</h1>
+                    <FacebookShareButton url={`https://blog-bblo1rvrt-hishmatrai.vercel.app/${location.pathname}`} >
+                        <FacebookIcon size={20} round={true}/>
+                    </FacebookShareButton>
+                    <EmailShareButton url={`https://blog-bblo1rvrt-hishmatrai.vercel.app/${location.pathname}`} >
+                        <EmailIcon size={20} round={true}/>
+                    </EmailShareButton>
                     <h1>Comments ({comments.length})</h1>
-                    <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
-                    <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <hr />
+
+                    {comments.length !== 0 && comments.map((v, i) => {
+                        return (
+                            <Grid container wrap="nowrap" spacing={2} key={i}>
+                                <h1></h1>
+                                <Grid item>
+                                    <Avatar>{v.name.slice(0, 1)}</Avatar>
+                                </Grid>
+                                <Grid justifyContent="left" item xs zeroMinWidth>
+                                    <h4 style={{ margin: 0, textAlign: "left" }}>{v.name}</h4>
+                                    <p style={{ textAlign: "left" }}>
+                                        {v.message}
+                                    </p>
+                                    <p style={{ textAlign: "left", color: "gray" }}>
+                                        {moment(v.date).format('MMM DD, YYYY')}
+                                    </p>
+                                </Grid>
+                            </Grid>
+                        )
+                    })}
+
+                    <hr />
+                    <input type="text" placeholder="Full Name" name="fullName" value={name} onChange={(e) => setName(e.target.value)} />
+                    <input type="email" placeholder="Email Address" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <textarea placeholder="Message ..." value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
                     <button onClick={PostHandler}>post</button>
                 </div>
