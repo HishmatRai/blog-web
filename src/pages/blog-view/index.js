@@ -17,12 +17,14 @@ import {
     FacebookShareButton,
     FacebookIcon,
     EmailShareButton,
-    EmailIcon
+    EmailIcon,
+    WhatsappShareButton,
+    WhatsappIcon
 
 } from "react-share";
 const BlogView = () => {
     const location = useLocation();
-    console.log("location.pathname",location.pathname)
+    console.log("location.pathname", location.pathname)
     const path = location.pathname.slice(11)
     const db = getFirestore(firebase);
     const [loading, setLoding] = useState(true);
@@ -106,32 +108,37 @@ const BlogView = () => {
                     />
                     <hr />
                     <h1>Share</h1>
-                    <FacebookShareButton url={`https://blog-bblo1rvrt-hishmatrai.vercel.app/${location.pathname}`} >
-                        <FacebookIcon size={20} round={true}/>
+                    <FacebookShareButton url={`https://blog-bblo1rvrt-hishmatrai.vercel.app${location.pathname}`} >
+                        <FacebookIcon size={20} round={true} />
                     </FacebookShareButton>
-                    <EmailShareButton url={`https://blog-bblo1rvrt-hishmatrai.vercel.app/${location.pathname}`} >
-                        <EmailIcon size={20} round={true}/>
+                    <EmailShareButton url={`https://blog-bblo1rvrt-hishmatrai.vercel.app${location.pathname}`} >
+                        <EmailIcon size={20} round={true} />
                     </EmailShareButton>
+                    <WhatsappShareButton url={`https://blog-bblo1rvrt-hishmatrai.vercel.app${location.pathname}`} >
+                        <WhatsappIcon size={20} round={true} />
+                    </WhatsappShareButton>
                     <h1>Comments ({comments.length})</h1>
                     <hr />
 
                     {comments.length !== 0 && comments.map((v, i) => {
                         return (
-                            <Grid container wrap="nowrap" spacing={2} key={i}>
-                                <h1></h1>
-                                <Grid item>
-                                    <Avatar>{v.name.slice(0, 1)}</Avatar>
+                            <div key={i}>
+                                <Grid container wrap="nowrap" spacing={2} >
+                                    <h1></h1>
+                                    <Grid item>
+                                        <Avatar>{v.name.slice(0, 1)}</Avatar>
+                                    </Grid>
+                                    <Grid justifyContent="left" item xs zeroMinWidth>
+                                        <h4 style={{ margin: 0, textAlign: "left" }}>{v.name}</h4>
+                                        <p style={{ textAlign: "left" }}>
+                                            {v.message}
+                                        </p>
+                                        <p style={{ textAlign: "left", color: "gray" }}>
+                                            {moment(v.date).format('MMM DD, YYYY')}
+                                        </p>
+                                    </Grid>
                                 </Grid>
-                                <Grid justifyContent="left" item xs zeroMinWidth>
-                                    <h4 style={{ margin: 0, textAlign: "left" }}>{v.name}</h4>
-                                    <p style={{ textAlign: "left" }}>
-                                        {v.message}
-                                    </p>
-                                    <p style={{ textAlign: "left", color: "gray" }}>
-                                        {moment(v.date).format('MMM DD, YYYY')}
-                                    </p>
-                                </Grid>
-                            </Grid>
+                            </div>
                         )
                     })}
 
