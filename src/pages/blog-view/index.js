@@ -106,17 +106,17 @@ const BlogView = () => {
           <hr />
           <h1>Share</h1>
           <FacebookShareButton
-            url={`https://blog-bblo1rvrt-hishmatrai.vercel.app${location.pathname}`}
+            url={`https://ihunar-blog.netlify.app${location.pathname}`}
           >
             <FacebookIcon size={20} round={true} />
           </FacebookShareButton>
           <EmailShareButton
-            url={`https://blog-bblo1rvrt-hishmatrai.vercel.app${location.pathname}`}
+            url={`https://ihunar-blog.netlify.app${location.pathname}`}
           >
             <EmailIcon size={20} round={true} />
           </EmailShareButton>
           <WhatsappShareButton
-            url={`https://blog-bblo1rvrt-hishmatrai.vercel.app${location.pathname}`}
+            url={`https://ihunar-blog.netlify.app${location.pathname}`}
           >
             <WhatsappIcon size={20} round={true} />
           </WhatsappShareButton>
