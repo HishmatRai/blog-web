@@ -128,7 +128,7 @@ const BlogView = () => {
                                     <Grid item>
                                         <Avatar>{v.name.slice(0, 1)}</Avatar>
                                     </Grid>
-                                    <Grid justifyContent="left" item xs zeroMinWidth>
+                                    <Grid  item xs zeroMinWidth>
                                         <h4 style={{ margin: 0, textAlign: "left" }}>{v.name}</h4>
                                         <p style={{ textAlign: "left" }}>
                                             {v.message}
